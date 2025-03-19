@@ -103,8 +103,10 @@ const EventCard = ({
   }, []);
 
   const handleViewDetails = () => {
-    // Navigate to event detail page if needed
-    // router.push(`/events/${event._id}`);
+    // Navigate to event detail page
+    if (event._id) {
+      router.push(`/events/${event._id}`);
+    }
   };
 
   return (

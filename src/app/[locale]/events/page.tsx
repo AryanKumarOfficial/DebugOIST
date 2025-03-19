@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'OIST - Programming Club Events',
-  description: 'Upcoming and past events from the OIST Programming Club',
+  description: 'Browse upcoming, ongoing, and past events from the OIST Programming Club. Register for upcoming events and stay updated with our latest programming activities.',
 };
 
 export default function EventsPage() {
@@ -15,7 +15,8 @@ export default function EventsPage() {
           Programming Club Events
         </h1>
         <p className="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
-          Join our upcoming events to enhance your programming skills, network with like-minded individuals, and stay updated with the latest technology trends.
+          Discover our programming events! Browse upcoming workshops, ongoing competitions, and past events. 
+          Each event is clearly marked with its status, making it easy to find what's happening now and what's coming next.
         </p>
       </div>
       

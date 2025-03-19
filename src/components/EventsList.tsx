@@ -17,7 +17,7 @@ const CloseIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
 );
 
 // Default image URL for when publicId is missing
-const DEFAULT_IMAGE_URL = "https://res.cloudinary.com/ducshmbin/image/upload/v1/placeholder-event";
+const DEFAULT_IMAGE_URL = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1/placeholder-event`
 
 export function ExpandableEvents() {
   const router = useRouter()
@@ -112,7 +112,7 @@ export function ExpandableEvents() {
     if (imageError[eventId] || !publicId) {
       return DEFAULT_IMAGE_URL
     }
-    return `https://res.cloudinary.com/ducshmbin/image/upload/v1/${publicId}`
+    return `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1/${publicId}`
   }
 
   // Toggle showing registrations for an event
@@ -179,7 +179,7 @@ export function ExpandableEvents() {
             placeholder="Search events..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-2 pl-10 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full px-4 py-2 pl-10 bg-black dark:bg-neutral-800 border border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           <svg xmlns="http://www.w3.org/2000/svg" className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -195,12 +195,12 @@ export function ExpandableEvents() {
         </div>
 
         <div className="flex flex-wrap gap-2 text-sm">
-          <span className="text-neutral-500 dark:text-neutral-400 pt-1">Sort by:</span>
+          <span className="text-neutral-500 dark:text-white pt-1">Sort by:</span>
           <button
             onClick={() => handleToggleSort('date')}
             className={`px-3 py-1 rounded-full flex items-center gap-1 ${sortBy === 'date'
-                ? 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
-                : 'bg-gray-100 text-gray-700 dark:bg-neutral-800 dark:text-neutral-300'
+              ? 'bg-purple-700 text-purple-100 dark:bg-purple-900 dark:text-purple-300'
+              : 'bg-gray-100 text-gray-700 dark:bg-neutral-800 dark:text-neutral-300'
               }`}
           >
             Date
@@ -213,8 +213,8 @@ export function ExpandableEvents() {
           <button
             onClick={() => handleToggleSort('title')}
             className={`px-3 py-1 rounded-full flex items-center gap-1 ${sortBy === 'title'
-                ? 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
-                : 'bg-gray-100 text-gray-700 dark:bg-neutral-800 dark:text-neutral-300'
+              ? 'bg-purple-700 text-purple-100 dark:bg-purple-900 dark:text-purple-300'
+              : 'bg-gray-100 text-gray-700 dark:bg-neutral-800 dark:text-neutral-300'
               }`}
           >
             Title
@@ -254,7 +254,7 @@ export function ExpandableEvents() {
                     fill
                     src={getImageUrl(active._id || '', active.publicId)}
                     alt={active.title || 'Event image'}
-                    className='object-cover object-top sm:rounded-tl-lg sm:rounded-tr-lg'
+                    className='object-cover object-top sm:rounded-tl-lg sm:rounded-tr-lg dark:bg-neutral-900 '
                     onError={() => handleImageError(active._id || '')}
                   />
                 </div>
@@ -385,9 +385,9 @@ export function ExpandableEvents() {
                 </h3>
               </div>
               <div className="flex-1 overflow-hidden">
-                <EventRegistrations 
-                  eventId={showRegistrations} 
-                  eventTitle={events.find(e => e._id === showRegistrations)?.title || 'Event'} 
+                <EventRegistrations
+                  eventId={showRegistrations}
+                  eventTitle={events.find(e => e._id === showRegistrations)?.title || 'Event'}
                 />
               </div>
             </motion.div>
@@ -432,14 +432,14 @@ export function ExpandableEvents() {
                     <div className="flex justify-between items-start">
                       <motion.h3
                         layoutId={`title-${event._id}-${id}`}
-                        className='font-medium text-neutral-800 dark:text-neutral-200'
+                        className='font-medium text-neutral-300 dark:text-neutral-400 group-hover:text-black dark:group-hover:text-black'
                       >
                         {event.title || 'Untitled Event'}
                       </motion.h3>
                     </div>
                     <motion.p
                       layoutId={`description-${event._id}-${id}`}
-                      className='text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2 mt-1'
+                      className='text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2 mt-1'
                     >
                       {event.description || 'No description provided'}
                     </motion.p>

@@ -27,8 +27,8 @@ const AdminPage = () => {
             <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-purple-500"></div>
           </div>
         }>
-          <div className="w-full overflow-x-visible overflow-y-visible">
-            <div className="w-full overflow-visible bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-gray-100 dark:border-neutral-800">
+          <div className="w-full overflow-x-visible overflow-y-visible text-white">
+            <div className="w-full overflow-visible bg-black/60 dark:bg-neutral-900 rounded-xl shadow-sm border border-gray-100 dark:border-neutral-800">
               <div className="p-4 sm:p-6">
                 <EventsComponent />
               </div>

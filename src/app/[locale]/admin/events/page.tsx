@@ -30,20 +30,20 @@ function formatDate(timestamp: number | string) {
 export default async function AdminEventsPage() {
   const session = await auth();
   const userId = session.userId;
-  
+
   // Redirect if not logged in
   if (!userId) {
     redirect('/');
   }
-  
+
   // In production, check if user is admin
   // const isAdmin = await checkIfUserIsAdmin(userId);
   // if (!isAdmin) {
   //   redirect('/dashboard');
   // }
-  
+
   const events = await getEvents();
-  
+
   return (
     <main className="container mx-auto px-4 py-12">
       <div className="mb-8 flex justify-between items-center">
@@ -55,22 +55,22 @@ export default async function AdminEventsPage() {
             Create, edit and manage event registrations
           </p>
         </div>
-        
-        <Link 
-          href="/admin/events/new" 
+
+        <Link
+          href="/admin/events/new"
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium transition-colors"
         >
           Create New Event
         </Link>
       </div>
-      
+
       {events.length === 0 ? (
         <div className="bg-white dark:bg-neutral-900 rounded-lg shadow p-8 text-center">
-          <svg 
-            className="w-16 h-16 text-neutral-300 dark:text-neutral-700 mx-auto mb-4" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24" 
+          <svg
+            className="w-16 h-16 text-neutral-300 dark:text-neutral-700 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -95,7 +95,7 @@ export default async function AdminEventsPage() {
             </thead>
             <tbody>
               {events.map((event) => (
-                <tr 
+                <tr
                   key={event._id.toString()}
                   className="border-b dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
                 >

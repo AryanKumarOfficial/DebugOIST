@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "motion/react";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type Tab = {
@@ -37,7 +37,7 @@ export const Tabs = ({
   const [hovering, setHovering] = useState(false);
 
   return (
-    <div className="w-full" style={{ width: '100%' }}>
+    <div className="w-full">
       <div
         className={cn(
           "flex flex-row items-center justify-start [perspective:1000px] relative overflow-auto sm:overflow-visible no-visible-scrollbar max-w-full w-full",
@@ -74,7 +74,7 @@ export const Tabs = ({
           </button>
         ))}
       </div>
-      <div className={cn("relative w-full", contentClassName)} style={{ width: '100%' }}>
+      <div className={cn("relative w-full", contentClassName)}>
         {tabs.map((tab, idx) => (
           <motion.div
             key={tab.value}
@@ -82,7 +82,6 @@ export const Tabs = ({
             initial={{ opacity: 0 }}
             animate={{ 
               opacity: idx === 0 ? 1 : 0,
-              // Only animate the active tab
               y: idx === 0 ? [0, 5, 0] : 0,
             }}
             transition={{ 
@@ -91,10 +90,8 @@ export const Tabs = ({
             }}
             className={cn(
               "w-full", 
-              // Only display the active tab, hide others completely
               idx === 0 ? "block" : "hidden"
             )}
-            style={{ width: '100%' }}
           >
             {tab.content}
           </motion.div>

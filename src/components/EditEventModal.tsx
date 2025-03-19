@@ -83,8 +83,8 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
       <ModalTrigger className={triggerClassName}>
         {triggerContent || children || 'Edit Event'}
       </ModalTrigger>
-      <ModalBody className='max-h-[90vh] overflow-y-auto'>
-        <ModalContent className='w-full p-4'>
+      <ModalBody>
+        <ModalContent>
           <EditEventContent eventId={eventId} />
         </ModalContent>
       </ModalBody>

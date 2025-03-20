@@ -11,6 +11,7 @@ export type EventProps = {
   time: string
   registration: string
   publicId: string
+  location?: string
 }
 
 interface EventStoreProps {
@@ -23,6 +24,7 @@ interface EventStoreProps {
   updateEvent: (eventId: string, newEvent: FormData) => Promise<void>
   getEvents: () => Promise<void>
   deleteEvent: (publicId: string) => Promise<void>
+  getEventById: (id: string) => EventProps | undefined
 }
 
 const useEvent = create<EventStoreProps>()(
@@ -148,6 +150,10 @@ const useEvent = create<EventStoreProps>()(
             } finally {
               setLoading(false)
             }
+          },
+
+          getEventById: (id: string) => {
+            return get().events.find(event => event._id === id)
           }
         }
       }),

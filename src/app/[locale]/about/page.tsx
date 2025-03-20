@@ -1,12 +1,24 @@
-import { useTranslations } from 'next-intl'
+import { AnimatedTooltipPreview } from '@/components/MembersProfilePage'
+import { StickyScrollRevealDemo } from '@/components/StickyScrollPage';
 
 export default function About() {
-  const t = useTranslations('')
   return (
-    <div className='px-32 py-24 min-h-screen text-center text-2xl'>
-      {t(
-        'The Programming Community at the Oriental Institute of Science and Technology (OIST) envisions itself as a beacon of innovation and collaboration, uniting students, faculty, and professionals passionate about coding and technology. With a mission to cultivate technical expertise and a creative mindset, the community fosters a vibrant ecosystem of learning through hackathons, workshops, coding challenges, and collaborative projects. Its vision is to empower individuals to become problem-solvers and innovators, contributing meaningfully to real-world technological advancements while creating a culture of inclusivity, excellence, and lifelong learning.'
-      )}
+    <div className="relative z-20 mt-10 px-6 lg:px-16 xl:px-24 bg-gray-50 text-gray-800">
+      {/* Meet the Team Section */}
+      <div className="mb-10 text-center">
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet the Team</h2>
+        <p className="text-gray-600">
+          Get to know the talented individuals behind our success.
+        </p>
+      </div>
+
+      {/* Team Members Preview */}
+      <AnimatedTooltipPreview />
+
+      {/* Sticky Scroll Section */}
+      <div className="mt-16">
+        <StickyScrollRevealDemo />
+      </div>
     </div>
-  )
+  );
 }

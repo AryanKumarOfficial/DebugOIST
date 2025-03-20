@@ -8,7 +8,10 @@ import {
 import { Inter, Rubik, Space_Grotesk } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
 import { Header } from './components/Header'
-import './globals.css'
+// import './globals.css'
+import '../../css/globals.css';
+
+
 import { ClerkProvider } from '@clerk/nextjs'
 import { Footer } from './components/Footer'
 import React from 'react'

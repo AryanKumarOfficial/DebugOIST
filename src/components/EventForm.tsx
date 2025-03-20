@@ -98,14 +98,14 @@ export default function EventForm({ isEditing = false, eventData = null, onSucce
       if (isEditing && eventData && eventData._id) {
         // Use the Zustand store's updateEvent function
         await updateEvent(eventData._id, formData);
-        
+
         addToast({
           title: 'Event updated successfully',
           description: `"${data.name}" has been updated.`,
           variant: 'success',
           duration: 5000
         });
-        
+
         // Clear any preview
         setPreview(null);
       } else {
@@ -135,7 +135,7 @@ export default function EventForm({ isEditing = false, eventData = null, onSucce
       })
     } finally {
       reset(); // Reset the form data
-      
+
       // Only close modal after reset so we don't see blank data in the form momentarily
       if (onSuccess) {
         onSuccess();
@@ -183,8 +183,8 @@ export default function EventForm({ isEditing = false, eventData = null, onSucce
                 {/* Preview image - either existing or newly selected */}
                 <img
                   src={preview || (eventData?.publicId
-                    ? `https://res.cloudinary.com/ducshmbin/image/upload/${eventData.publicId}`
-                    : "https://res.cloudinary.com/ducshmbin/image/upload/v1/placeholder-event")}
+                    ? `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${eventData.publicId}`
+                    : "https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1/placeholder-event")}
                   alt="Event thumbnail"
                   className="object-cover object-center w-full h-full transition-opacity hover:opacity-90"
                   onClick={() => document.getElementById('file-input')?.click()}
@@ -275,7 +275,7 @@ export default function EventForm({ isEditing = false, eventData = null, onSucce
         <div className='flex justify-end pt-4'>
           <button
             type={'submit'}
-            className='inline-flex h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-200 transition-colors hover:bg-[linear-gradient(110deg,#000103,45%,#1e2631,95%,#000103)] hover:bg-[length:150%_100%] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50'
+            className='inline-flex h-12 items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-200 transition-colors hover:bg-[linear-gradient(110deg,#000103,45%,#1e2631,95%,#000103)] hover:bg-[length:150%_100%] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50'
             disabled={loading}
           >
             {loading

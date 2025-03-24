@@ -439,7 +439,7 @@ function EventsSection() {
                     <div className="mt-6">
                       <Modal>
                         <ModalTrigger>
-                          <Button className="bg-gradient-to-r from-blue-600/80 to-blue-600/80 hover:from-blue-600 hover:to-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                          <Button className="bg-gradient-to-r from-blue-600/80 to-blue-600/80 hover:from-blue-600 hover:to-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium" disabled={event.registration < new Date().toISOString()}>
                             Register
                           </Button>
                         </ModalTrigger>

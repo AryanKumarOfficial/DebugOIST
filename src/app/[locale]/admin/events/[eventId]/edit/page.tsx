@@ -1,29 +1,24 @@
 "use client"
-import connect from '@/src/Backend/mongoose';
-import Event, { IEvent } from '@/src/Backend/Models/Event';
+import { IEvent } from '@/src/Backend/Models/Event';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { updateEvent } from "../../actions";
-import { notFound } from "next/navigation";
 import { useEffect, useState } from 'react';
 
-async function getEvent(eventId: string) {
-    await connect();
-    const event = await Event.findById(eventId);
-    if (!event) {
-        notFound();
-    }
-    return event;
-}
 
 export default function EditEventPage({ params }: { params: { eventId: string } }) {
     const [event, setEvent] = useState<IEvent | null>(null)
     useEffect(() => {
         (async () => {
-            const e = await getEvent(params.eventId)
-            setEvent(e);
+            const res = await fetch(`/api/event/${params.eventId}`)
+            const e = await res.json();
+            if (e.success) {
+                console.log("Event: ", e.event);
+
+            }
+            setEvent(e.event);
         })()
     }, [])
 

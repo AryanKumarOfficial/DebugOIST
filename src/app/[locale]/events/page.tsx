@@ -146,18 +146,24 @@ export default function EventsPage() {
                                                     </div>
 
                                                     <div className="mt-6 flex flex-col w-full justify-between sm:flex-row gap-4">
-                                                        <Modal>
-                                                            <ModalTrigger>
-                                                                <Button className="w-full bg-gradient-to-r from-blue-600/80 to-blue-600/80 hover:from-blue-600 hover:to-blue-600 text-white px-4 rounded-md text-sm font-medium">
-                                                                    Register
-                                                                </Button>
-                                                            </ModalTrigger>
-                                                            <ModalBody className="bg-neutral-900 border-none max-h-[90vh] overflow-y-auto">
-                                                                <ModalContent className="p-6">
-                                                                    <RegistrationModal event={event} />
-                                                                </ModalContent>
-                                                            </ModalBody>
-                                                        </Modal>
+                                                        {!(new Date().toISOString() > event.registration) ? (
+                                                            <Modal>
+                                                                <ModalTrigger>
+                                                                    <Button className="w-full bg-gradient-to-r from-blue-600/80 to-blue-600/80 hover:from-blue-600 hover:to-blue-600 text-white px-4 rounded-md text-sm font-medium">
+                                                                        Register
+                                                                    </Button>
+                                                                </ModalTrigger>
+                                                                <ModalBody className="bg-neutral-900 border-none max-h-[90vh] overflow-y-auto">
+                                                                    <ModalContent className="p-6">
+                                                                        <RegistrationModal event={event} />
+                                                                    </ModalContent>
+                                                                </ModalBody>
+                                                            </Modal>
+                                                        ) : (
+                                                            <Button className="w-full bg-gradient-to-r from-blue-600/80 to-blue-600/80 hover:from-blue-600 hover:to-blue-600 text-white px-4 rounded-md text-sm font-medium" disabled>
+                                                                Registeration closed
+                                                            </Button>
+                                                        )}
                                                         <Button
                                                             variant={"ghost"}
                                                             className="w-fit mt-1 bg-gradient-to-r from-black via-zinc-600/80 to-black hover:from-zinc-600/80 hover:to-zinc-600/80 hover:via-black text-white px-4 rounded-md text-sm font-medium transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg">

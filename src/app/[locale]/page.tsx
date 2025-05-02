@@ -41,9 +41,10 @@ export default function DashboardPage() {
       <main className="w-full">
         <HeroSection />
         <FeaturesSection />
-        <ProjectsSection />
+
         <EventsSection />
-        <TestimonialsSection />
+        <ProjectsSection />
+
         <JoinSection />
       </main>
 
@@ -118,7 +119,7 @@ function HeroSection() {
             variants={itemVariants}
             className="flex flex-wrap gap-4 justify-center lg:justify-start"
           >
-            <Button className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white px-6 py-3 rounded-md text-base font-medium">
+            <Button disabled className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white px-6 py-3 rounded-md text-base font-medium">
               Join Club
             </Button>
             <Button
@@ -144,7 +145,7 @@ function HeroSection() {
               ))}
             </div>
             <p className="text-zinc-400 text-sm">
-              Join <span className="text-white font-medium">65+</span> other members
+              Join <span className="text-white font-medium">15+</span> core members
             </p>
           </motion.div>
         </motion.div>
@@ -232,22 +233,25 @@ function FeaturesSection() {
 function ProjectsSection() {
   const projects = [
     {
-      title: "AI Assistant",
-      description: "A natural language processing model trained to help with programming tasks",
-      tech: ["Python", "TensorFlow", "NLP"],
-      progress: 85
+      title: "LightUI",
+      description: "A Light Weight UI to use Local LLM models.",
+      tech: ["Python", "Javascript"],
+      progress: 85,
+      link: "https://github.com/Nev-Labs/LightUI"
     },
     {
-      title: "Smart Home Dashboard",
-      description: "An IoT interface to control and monitor connected devices",
-      tech: ["React", "Node.js", "IoT"],
-      progress: 70
+      title: "ACM Club Website",
+      description: "A website for ACM Club of Oriental Institute of Science and Technology.",
+      tech: ["Typescript", "Node.js", "React"],
+      progress: 70,
+      link: "https://github.com/Nev-Labs/ACM_OIST"
     },
     {
-      title: "Blockchain Explorer",
-      description: "Visualize and navigate blockchain data with an intuitive interface",
-      tech: ["Web3.js", "React", "GraphQL"],
-      progress: 60
+      title: "Debug Oist Website",
+      description: "Debug Programming Club Website for Oriental Institute of Science and Technology.",
+      tech: ["NextJS", "RestApi", "ReactThreeFiber"],
+      progress: 60,
+      link: "https://github.com/Nev-Labs/DebugOIST"
     }
   ];
 
@@ -278,7 +282,7 @@ function ProjectsSection() {
             className="group"
           >
             <Card className="h-full bg-gradient-to-br from-zinc-900 to-black border-zinc-800 hover:border-blue-500/30 transition-all duration-300 overflow-hidden">
-              <CardContent className="p-8">
+              <CardContent className="p-8 flex flex-col h-full">
                 <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">{project.title}</h3>
                 <p className="text-zinc-400 text-base mb-6">{project.description}</p>
 
@@ -298,10 +302,16 @@ function ProjectsSection() {
                   <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-blue-500 to-violet-500 rounded-full"
-                      style={{ width: `${project.progress}%` }}
+                      style={{ width: `${project.progress}% `}}
                     ></div>
                   </div>
                 </div>
+
+                <a href={project.link} target="_blank" rel="noopener noreferrer" className="mt-6">
+                  <Button variant="outline" className="w-full border-zinc-700 hover:bg-zinc-800/50 text-zinc-300 hover:text-white px-6 py-3 rounded-md text-base font-medium">
+                    View Project
+                  </Button>
+                </a>
               </CardContent>
             </Card>
           </motion.div>
@@ -539,7 +549,7 @@ function JoinSection() {
         <p className="text-lg text-zinc-400 max-w-3xl mx-auto mb-12">
           Join Debug Programming Club today and start collaborating with top developers and innovators.
         </p>
-        <Button className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white px-8 py-4 rounded-md text-xl font-semibold">
+        <Button disabled className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white px-8 py-4 rounded-md text-xl font-semibold">
           Join Now
         </Button>
       </div>

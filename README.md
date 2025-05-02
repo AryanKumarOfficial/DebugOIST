@@ -279,10 +279,7 @@ Access the website at `http://localhost:3000`
 vercel deploy
 ```
 
-### Alternative Deployment Options
-- **Railway**: Connect repository and configure variables
-- **Netlify**: Deploy via GitHub integration
-- **Self-hosting**: Build application and serve with Node.js
+
 
 ## 🛡️ Security Considerations
 - **Environment Variables**: Store sensitive credentials securely

@@ -26,7 +26,7 @@ const Footer = () => {
             <FaGithub size={24} />
           </a>
           <a
-            href="https://www.linkedin.com/company/debugoist/posts/?feedView=all"
+            href="https://www.linkedin.com/company/debugoist/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-white transition"
@@ -50,7 +50,7 @@ const Footer = () => {
             <FaInstagram size={24} />
           </a>
           <a
-            href="mailto:your-email@example.com"
+            href="mailto:ashishashish7440@gmail.com"
             className="hover:text-white transition"
           >
             <FaEnvelope size={24} />

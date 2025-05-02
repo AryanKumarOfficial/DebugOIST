@@ -38,7 +38,7 @@ export default function Footer() {
           <a href="https://www.instagram.com/debug.oist/" target="_blank" rel="noopener noreferrer">
             <Instagram className="w-5 h-5 text-gray-400 hover:text-pink-500" />
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.linkedin.com/company/debugoist/" target="_blank" rel="noopener noreferrer">
             <Linkedin className="w-5 h-5 text-gray-400 hover:text-blue-500" />
           </a>
         </div>

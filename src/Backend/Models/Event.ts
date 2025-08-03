@@ -10,6 +10,8 @@ export interface IEvent {
   publicId: string
   category: string
   venue: string
+  past: boolean
+  participants?: number
 }
 
 const EventSchema = new mongoose.Schema<IEvent>(
@@ -46,6 +48,15 @@ const EventSchema = new mongoose.Schema<IEvent>(
       type: String,
       required: true
     },
+    past: {
+      type: Boolean,
+      default: false,
+      required: true
+    },
+    participants: {
+      type: Number,
+      default: 0
+    }
   },
   { timestamps: true }
 )

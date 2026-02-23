@@ -25,7 +25,7 @@ export default function EventForm({ isEditing = false, eventData = null, onSucce
 
   // Create a modified schema for editing where thumbnail is optional
   const formResolver = isEditing
-    ? zodResolver(formSchema.omit({ thumbnail: true }))  // Remove thumbnail validation entirely when editing
+    ? zodResolver(formSchema.omit({ image: true }))  
     : zodResolver(formSchema);
 
   const {
@@ -37,9 +37,9 @@ export default function EventForm({ isEditing = false, eventData = null, onSucce
   } = useForm<FormDataType>({
     resolver: formResolver,
     defaultValues: {
-      name: '',
+      title: '',
       description: '',
-      thumbnail: undefined,
+      image: undefined,
       date: '',
       time: '',
       registration: ''
@@ -53,7 +53,7 @@ export default function EventForm({ isEditing = false, eventData = null, onSucce
   // Pre-fill form with event data when editing
   useEffect(() => {
     if (isEditing && eventData) {
-      setValue('name', eventData.title || '');
+      setValue('title', eventData.title || '');
       setValue('description', eventData.description || '');
 
       // Convert timestamps to date strings if they exist
@@ -76,19 +76,19 @@ export default function EventForm({ isEditing = false, eventData = null, onSucce
   }, [isEditing, eventData, setValue]);
 
   const handleFileUpload = (files: File[]) => {
-    setValue('thumbnail', files[0])
+    setValue('image', files[0])
     console.log('Uploaded files:', files)
   }
 
   const onSubmit: SubmitHandler<FormDataType> = async data => {
     try {
       const formData = new FormData()
-      formData.append('eventName', data.name)
+      formData.append('eventName', data.title)
       formData.append('description', data.description)
 
       // Only append thumbnail if it exists (it might not be updated when editing)
-      if (data.thumbnail) {
-        formData.append('thumbnail', data.thumbnail as File)
+      if (data.image) {
+        formData.append('thumbnail', data.image as File)
       }
 
       formData.append('eventDate', data.date)
@@ -101,7 +101,7 @@ export default function EventForm({ isEditing = false, eventData = null, onSucce
         
         addToast({
           title: 'Event updated successfully',
-          description: `"${data.name}" has been updated.`,
+          description: `"${data.title}" has been updated.`,
           variant: 'success',
           duration: 5000
         });
@@ -112,7 +112,7 @@ export default function EventForm({ isEditing = false, eventData = null, onSucce
         await addEvent(formData)
         addToast({
           title: 'Event created successfully',
-          description: `"${data.name}" has been added to events.`,
+          description: `"${data.title}" has been added to events.`,
           variant: 'success',
           duration: 5000
         })
@@ -154,10 +154,10 @@ export default function EventForm({ isEditing = false, eventData = null, onSucce
             id='name'
             placeholder='Name of the Event'
             type='text'
-            {...register('name')}
+            {...register('title')}
           />
-          {errors.name && (
-            <span className='text-red-500'>{errors.name.message}</span>
+          {errors.title && (
+            <span className='text-red-500'>{errors.title.message}</span>
           )}
         </LabelInputContainer>
         <LabelInputContainer>
@@ -232,8 +232,8 @@ export default function EventForm({ isEditing = false, eventData = null, onSucce
             </div>
           )}
 
-          {errors.thumbnail && (
-            <span className='text-red-500'>{errors.thumbnail.message}</span>
+          {errors.image && (
+            <span className='text-red-500'>{errors.image.message}</span>
           )}
         </LabelInputContainer>
         <LabelInputContainer>

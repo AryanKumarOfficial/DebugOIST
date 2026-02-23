@@ -5,7 +5,7 @@ import { v2 as cloudinary } from 'cloudinary'
 import Event from '@/src/Backend/Models/Event'
 import mongoose from 'mongoose'
 import connect from '@/src/Backend/mongoose'
-
+import TeamRegistration from '@/src/Backend/Models/TeamRegistration'
 
 // Configuration
 cloudinary.config({
@@ -105,8 +105,24 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   try {
     await connect()
-    const events = await Event.find()
-    return NextResponse.json({ events }, { status: 200 })
+    const events = await Event.find({}).lean()
+
+    const eventsWithParticipants = await Promise.all(
+      events.map(async event => {
+        const participantsCount = await TeamRegistration.countDocuments({
+          eventId: event._id
+        })
+        console.log('participants ', participantsCount)
+        return {
+          participants: participantsCount,
+          ...event
+        }
+      })
+    )
+    return NextResponse.json(
+      { events: eventsWithParticipants },
+      { status: 200 }
+    )
   } catch (e) {
     console.log(e, 'Failed to fetch events')
     return NextResponse.json(

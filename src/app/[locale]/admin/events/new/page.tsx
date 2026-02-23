@@ -7,20 +7,39 @@ import { useRef, useState } from 'react'
 import useEvent from '@/src/store/Event'
 import { useToast } from '@/src/components/ui/toast'
 import { useForm } from 'react-hook-form'
-import { FormDataType, formSchema } from '@/src/Schema/Event'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { useRouter } from '@/src/navigation'
+
+// Define a schema that matches your UI fields and Store requirements
+const eventFormSchema = z.object({
+  title: z.string().min(1, { message: 'Title is required' }),
+  description: z.string().min(1, { message: 'Description is required' }),
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Invalid date format' }),
+  time: z.string().min(1, { message: 'Time is required' }),
+  venue: z.string().min(1, { message: 'Venue is required' }),
+  category: z.string().min(1, { message: 'Category is required' }),
+  registration: z.string().optional(),
+  image: z
+    .any()
+    .refine(file => file instanceof File, { message: 'Image is required' })
+})
+
+type EventFormType = z.infer<typeof eventFormSchema>
 
 export default function NewEventPage() {
-  const {control, handleSubmit,formState:{errors}} = useForm<FormDataType>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      description: '',
-      date: '',
-      time: '',
-      registration: ''
-    }
+  const router = useRouter()
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting }
+  } = useForm<EventFormType>({
+    resolver: zodResolver(eventFormSchema)
   })
+
   const { addEvent } = useEvent()
   const { addToast } = useToast()
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
@@ -30,6 +49,8 @@ export default function NewEventPage() {
     const file = event.target.files?.[0]
     if (file) {
       setPreviewUrl(URL.createObjectURL(file))
+      // Manually set the value in react-hook-form
+      setValue('image', file, { shouldValidate: true })
     }
   }
 
@@ -37,49 +58,20 @@ export default function NewEventPage() {
     inputRef.current?.click()
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-
+  const onSubmit = async (data: EventFormType) => {
     try {
-      // Extract fields
-      const title = formData.get('title') as string
-      const description = formData.get('description') as string
-      const date = formData.get('date') as string
-      const time = formData.get('time') as string
-      const venue = formData.get('venue') as string
-      const category = formData.get('category') as string
-      const registrationDeadline = formData.get('registration') as string
-      const image = formData.get('image') as File
-
-      // Create an object for easier validation.
-      const requiredFields: { [key: string]: any } = {
-        title,
-        description,
-        date,
-        time,
-        venue,
-        category,
-        registrationDeadline,
-        image
+      const formData = new FormData()
+      formData.append('title', data.title)
+      formData.append('description', data.description)
+      formData.append('date', data.date)
+      formData.append('time', data.time)
+      formData.append('venue', data.venue)
+      formData.append('category', data.category)
+      if (data.registration) {
+        formData.append('registration', data.registration)
       }
-      console.log('requiredFields', requiredFields)
+      formData.append('image', data.image)
 
-      // Check if any required field is missing.
-      const missingField = Object.entries(requiredFields).find(
-        ([, value]) => !value
-      )
-      if (missingField) {
-        console.log('All fields are required')
-        addToast({
-          title: 'Error',
-          description: 'All fields are required',
-          variant: 'error'
-        })
-        return
-      }
-
-      // Call the API with the complete form data.
       await addEvent(formData)
 
       addToast({
@@ -87,11 +79,12 @@ export default function NewEventPage() {
         description: 'Event created successfully',
         variant: 'success'
       })
+      router.push('/admin/events')
     } catch (error: any) {
       console.error('Error creating event:', error)
       addToast({
         title: 'Error',
-        description: 'Failed to create event',
+        description: error.message || 'Failed to create event',
         variant: 'error'
       })
     }
@@ -116,7 +109,7 @@ export default function NewEventPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className='space-y-6'>
+              <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
                 {/* Event Title */}
                 <div className='space-y-2'>
                   <label
@@ -127,10 +120,14 @@ export default function NewEventPage() {
                   </label>
                   <Input
                     id='title'
-                    name='title'
+                    {...register('title')}
                     className='border-zinc-800 bg-zinc-900/50 text-zinc-100'
-                    required
                   />
+                  {errors.title && (
+                    <p className='text-xs text-red-500'>
+                      {errors.title.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Description */}
@@ -143,23 +140,23 @@ export default function NewEventPage() {
                   </label>
                   <Textarea
                     id='description'
-                    name='description'
+                    {...register('description')}
                     className='min-h-[100px] border-zinc-800 bg-zinc-900/50 text-zinc-100'
-                    required
                   />
+                  {errors.description && (
+                    <p className='text-xs text-red-500'>
+                      {errors.description.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Image Upload with Preview */}
                 <div className='space-y-2'>
-                  <label
-                    htmlFor='image'
-                    className='block text-sm font-medium text-gray-300'
-                  >
+                  <label className='block text-sm font-medium text-gray-300'>
                     Image
                   </label>
+                  {/* Hidden Input for RHF registration ref is handled manually */}
                   <input
-                    id='image'
-                    name='image'
                     type='file'
                     accept='image/*'
                     ref={inputRef}
@@ -176,6 +173,12 @@ export default function NewEventPage() {
                   <p className='text-sm text-gray-400'>
                     Image must be a JPG or PNG file
                   </p>
+                  {errors.image && (
+                    <p className='text-xs text-red-500'>
+                      {String(errors.image.message)}
+                    </p>
+                  )}
+
                   {previewUrl && (
                     <div className='mt-4'>
                       <p className='text-sm font-medium text-gray-300'>
@@ -201,11 +204,15 @@ export default function NewEventPage() {
                     </label>
                     <Input
                       id='date'
-                      name='date'
                       type='date'
+                      {...register('date')}
                       className='border-zinc-800 bg-zinc-900/50 text-zinc-100'
-                      required
                     />
+                    {errors.date && (
+                      <p className='text-xs text-red-500'>
+                        {errors.date.message}
+                      </p>
+                    )}
                   </div>
                   <div className='space-y-2'>
                     <label
@@ -216,11 +223,15 @@ export default function NewEventPage() {
                     </label>
                     <Input
                       id='time'
-                      name='time'
                       type='time'
+                      {...register('time')}
                       className='border-zinc-800 bg-zinc-900/50 text-zinc-100'
-                      required
                     />
+                    {errors.time && (
+                      <p className='text-xs text-red-500'>
+                        {errors.time.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -234,10 +245,14 @@ export default function NewEventPage() {
                   </label>
                   <Input
                     id='venue'
-                    name='venue'
+                    {...register('venue')}
                     className='border-zinc-800 bg-zinc-900/50 text-zinc-100'
-                    required
                   />
+                  {errors.venue && (
+                    <p className='text-xs text-red-500'>
+                      {errors.venue.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Category */}
@@ -250,10 +265,14 @@ export default function NewEventPage() {
                   </label>
                   <Input
                     id='category'
-                    name='category'
+                    {...register('category')}
                     className='border-zinc-800 bg-zinc-900/50 text-zinc-100'
-                    required
                   />
+                  {errors.category && (
+                    <p className='text-xs text-red-500'>
+                      {errors.category.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Registration Deadline */}
@@ -266,19 +285,25 @@ export default function NewEventPage() {
                   </label>
                   <Input
                     id='registration'
-                    name='registration'
                     type='date'
+                    {...register('registration')}
                     className='border-zinc-800 bg-zinc-900/50 text-zinc-100'
                   />
+                  {errors.registration && (
+                    <p className='text-xs text-red-500'>
+                      {errors.registration.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Action Buttons */}
                 <div className='flex gap-4 pt-4'>
                   <Button
                     type='submit'
+                    disabled={isSubmitting}
                     className='flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-700/20 hover:from-purple-700 hover:to-blue-700'
                   >
-                    Create Event
+                    {isSubmitting ? 'Creating...' : 'Create Event'}
                   </Button>
                   <Button
                     type='button'

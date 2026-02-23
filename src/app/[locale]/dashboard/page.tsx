@@ -8,7 +8,6 @@ import { ScrollArea } from "@/src/components/ui/scroll-area";
 import { format } from "date-fns";
 
 async function getRegistrations(userEmail: string) {
-    await connect();
     // Query for registrations that belong to the current user's email
     const registrations = await IndividualRegistration.find({ email: userEmail })
         .sort({ createdAt: -1 });
@@ -16,7 +15,6 @@ async function getRegistrations(userEmail: string) {
 }
 
 async function getEvents() {
-    await connect();
     const events = await Event.find();
     return events;
 }
@@ -30,7 +28,7 @@ export default async function MyRegistrationsPage() {
 
     console.log("USer data: ", user.primaryEmailAddress?.emailAddress);
 
-
+  await connect();
     const [registrations, events] = await Promise.all([
         getRegistrations(String(user.primaryEmailAddress?.emailAddress)),
         getEvents()
